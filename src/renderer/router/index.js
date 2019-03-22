@@ -17,6 +17,18 @@ export default new Router({
       component: require('@/components/PreparationPage').default,
     },
     {
+      path: '/summary',
+      name: 'summary-page',
+      component: require('@/components/SummaryPage').default,
+      props: true,
+    },
+    {
+      path: '/congrats',
+      name: 'congrats-page',
+      component: require('@/components/CongratsPage').default,
+      props: true,
+    },
+    {
       path: '*',
       redirect: '/preparation',
     },
