@@ -12,4 +12,7 @@
 
 <style>
   /* CSS */
+  * {
+    font-family: "Helvetica Neue",Helvetica, Arial,sans-serif;
+  }
 </style>

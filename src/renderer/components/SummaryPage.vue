@@ -1,18 +1,20 @@
 <template>
   <div id="wrapper">
-    <img id="logo" src="~@/assets/logo.png" alt="electron-vue" width="200">
     <main>
-      <div>
-        <span class="title">
-          Summary
-        </span>
-        <router-link to="/preparation">Go to Preparation</router-link>
-      </div>
 
-      <div v-for="(seconds, appName, index) in focusAppObj" :key="index">
-        <p>{{ appName }} : {{ seconds }} seconds<input type="checkbox"/></p>
-      </div>
-      <button @click="classifyDistraction()">Submit</button>
+      <el-card shadow="hover" header="Summary">
+        <el-row v-for="(activityObj, appName, index) in focusAppObj" :key="index">
+          <el-col>
+            
+              <h3>App Name: {{ appName }}</h3>
+              <h5>Time Used: {{ activityObj.focusTime }} seconds</h5>
+              <el-checkbox v-model="activityObj.isDistraction" :value="false" border label="Distraction"></el-checkbox>
+              
+          </el-col>
+        </el-row>
+      </el-card>
+      
+       <p><el-button @click="classifyDistraction()" round plain>Submit</el-button></p>
     </main>
   </div>
 </template>
@@ -24,7 +26,19 @@
     methods: {
       classifyDistraction() {
         //DB connection
-        this.$router.push({ name: 'congrats-page', params: { totalFocusTime: 100 }})
+        let totalFocusTime = 0;
+
+        for (let appName in this.focusAppObj) {
+          if (this.focusAppObj.hasOwnProperty(appName)) {
+            let activityObj = this.focusAppObj[appName];
+            console.log(activityObj.isDistraction);
+            if (!activityObj.isDistraction) {
+              totalFocusTime += activityObj.focusTime;
+            }
+          }
+        }
+
+        this.$router.push({ name: 'congrats-page', params: { totalFocusTime }})
       },
     },
     props: ['focusAppObj'],

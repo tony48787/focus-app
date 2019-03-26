@@ -1,25 +1,37 @@
 <template>
   <div id="wrapper">
-    <img id="logo" src="~@/assets/logo.png" alt="electron-vue" width="200">
     <main>
-      <div class="left-side">
+      <el-card class="box-card">
         <span class="title">
-          Preparation
+          Choose your time to focus
         </span>
-        <router-link :to="{ name: 'counter-page', params: { focusTime: 5 }}">Go to Counter</router-link>
-      </div>
+        <el-time-picker
+          v-model="focusTime"
+          :picker-options="{
+            selectableRange: '00:00:01 - 00:30:00'
+          }"
+          placeholder="Focus Time">
+        </el-time-picker>
+
+        <p><el-button @click="startCounting()" round plain>Start</el-button></p>
+      </el-card>
     </main>
   </div>
 </template>
 
 <script>
-
   export default {
     name: 'preparation-page',
     methods: {
-      open(link) {
-        this.$electron.shell.openExternal(link);
+      startCounting() {
+        let focusTime = this.focusTime.getMinutes() * 60 + this.focusTime.getSeconds();
+        this.$router.push({ name: 'counter-page', params: { focusTime: focusTime }});
       },
     },
+    data: () => {
+      return {
+        focusTime: new Date(0, 0, 0, 0, 0, 3),
+      };
+    }
   };
 </script>

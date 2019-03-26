@@ -1,15 +1,12 @@
 <template>
   <div id="wrapper">
-    <img id="logo" src="~@/assets/logo.png" alt="electron-vue" width="200">
-    <main>
-      <div>
-        <span class="title">
-          Counter {{remainingTime}}
-        </span>
-        <button @click="startCounting()">Start</button>
-        <button @click="stopCounting()">Stop</button>
-      </div>
-    </main>
+     <el-card shadow="always">
+      <el-row>
+        <el-col  :offset="6" :span="12">
+          <el-progress type="circle" :percentage="progress" :status="statusText" :show-text="statusText != 'text'"></el-progress>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
@@ -20,9 +17,6 @@
     name: 'counter-page',
     components: { },
     methods: {
-      open(link) {
-        this.$electron.shell.openExternal(link);
-      },
       startCounting() {
         function onActiveWinUpdated(window) {
           if ( this.currentFocusAppName == "") {
@@ -31,9 +25,11 @@
 
           try {
             if (this.currentFocusAppName in this.focusAppObj) {
-              this.focusAppObj[this.currentFocusAppName] += 1;
+              this.focusAppObj[this.currentFocusAppName]["focusTime"] += 1;
             } else {
-              this.focusAppObj[this.currentFocusAppName] = 1;
+              this.focusAppObj[this.currentFocusAppName] = {
+                focusTime: 1
+              };
             }
           } catch (err) {
             // as
@@ -42,6 +38,7 @@
           this.currentFocusAppName = window.app;
 
           this.remainingTime = this.remainingTime - 1;
+          this.progress = (this.focusTime - this.remainingTime) / this.focusTime * 100;
           if (this.remainingTime <= 0) {
             this.stopCounting();
           }
@@ -51,8 +48,18 @@
       },
       stopCounting() {
         monitorActiveWin.stop();
-        this.$router.push({ name: 'summary-page', params: { focusAppObj: this.focusAppObj }})
+        this.statusText = "success";
+
+        setTimeout(() => {
+          this.$router.push({ name: 'summary-page', params: { focusAppObj: this.focusAppObj }});
+        }, 3000);
+        
       }
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+        this.startCounting();
+      })
     },
     props: ['focusTime'],
     data: () => {
@@ -60,6 +67,8 @@
         remainingTime: 0,
         focusAppObj: {},
         currentFocusAppName: "",
+        progress: 0,
+        statusText: "text",
       };
     },
   };

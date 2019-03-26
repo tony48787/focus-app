@@ -1,16 +1,9 @@
 <template>
   <div id="wrapper">
-    <img id="logo" src="~@/assets/logo.png" alt="electron-vue" width="200">
     <main>
       <div>
-        <span class="title">
-          Summary
-        </span>
-        <router-link to="/preparation">Go to Preparation</router-link>
-      </div>
-
-      <div>
         <p> Your total focusTime is {{ totalFocusTime }} seconds</p>
+        <p><el-button @click="backToMain()" round plain>Got It!</el-button></p>
       </div>
     </main>
   </div>
@@ -21,10 +14,9 @@
     name: 'congrats-page',
     components: { },
     methods: {
-      classifyDistraction() {
-        //DB connection
-        this.$router.push({ name: 'congrats-page', params: { totalFocusTime: 100 }})
-      },
+      backToMain() {
+        this.$router.push({ name: 'preparation-page'})
+      }
     },
     props: ['totalFocusTime'],
     data: () => {
