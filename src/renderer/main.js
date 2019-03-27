@@ -6,19 +6,15 @@ import router from './router';
 
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
-
+import 'element-ui/lib/theme-chalk/index.css'
+  
 // configure language
 locale.use(lang);
 
-import { Button, InputNumber, TimePicker, Card, Row, Col, Progress, Checkbox } from 'element-ui';
-Vue.use(Button);
-Vue.use(InputNumber);
-Vue.use(TimePicker);
-Vue.use(Card);
-Vue.use(Row);
-Vue.use(Col);
-Vue.use(Progress);
-Vue.use(Checkbox);
+// Add your new component
+import ElementUI from 'element-ui';
+Vue.use(ElementUI);
+// End Add
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'));
 Vue.http = Vue.prototype.$http = axios;
